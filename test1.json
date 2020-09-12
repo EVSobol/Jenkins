@@ -1,0 +1,167 @@
+{
+	"info": {
+		"_postman_id": "0b4f71d2-48a5-419d-a646-bcaacf10a982",
+		"name": "Sobol",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "https://cloud-api.yandex.net/v1/disk",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "1cb928df-e4de-41fb-b010-710c4d08477f",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;\r",
+							"\r",
+							"pm.test(\"Content-Type is present\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"pm.test(\"The response has all properties\", () => {\r",
+							"    //parse the response json and test three properties\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.user.login).to.eql('jena65535');\r",
+							"    pm.expect(responseJson.user.login).to.be.a('string');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type header is application/json; charset=utf-8\", () => {\r",
+							"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Length header is 884\", () => {\r",
+							"  pm.expect(pm.response.headers.get('Content-Length')).to.eql('884');\r",
+							"});\r",
+							"// Присутствуют ли куки\r",
+							"//pm.test(\"Cookie JSESSIONID is present\", () => {\r",
+							"  //pm.expect(pm.cookies.has('JSESSIONID')).to.be.true;\r",
+							"//});\r",
+							"\r",
+							"pm.test(\"Successful POST request\", () => {\r",
+							"  pm.expect(pm.response.code).to.be.oneOf([200,201,202]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 222ms\", () => {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(2262);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Object is contained\", () => {\r",
+							"  const expectedObject = {\r",
+							"    \"max_file_size\": 53687091200,\r",
+							"    \"is_paid\": false\r",
+							"  };\r",
+							"  pm.expect(pm.response.json()).to.deep.include(expectedObject);\r",
+							"});\r",
+							"\r",
+							"const schema ={\r",
+							"    \"type\":\"object\",\r",
+							"    \"max_file_size\": {\"type\":\"string\",\"pattern\":\"^[0-9]*\"},\r",
+							"    \"unlimited_autoupload_enabled\": {\"type\":\"string\",\"enum\":[\"false\",\"true\"]},\r",
+							"    \"total_space\": {\"type\":\"string\",\"pattern\":\"^[0-9]*\"},\r",
+							"    \"trash_size\": {\"type\":\"string\",\"pattern\":\"^[0-9]*\"},\r",
+							"    \"is_paid\": {\"type\":\"string\",\"enum\":[\"false\",\"true\"]},\r",
+							"    \"used_space\": {\"type\":\"string\",\"pattern\":\"^[0-9]*\"},\r",
+							"    \"system_folders\": {\r",
+							"        \"odnoklassniki\": {\r",
+							"            \"type\":\"string\",\r",
+							"            \"enum\":[\"disk:/Социальные сети/Одноклассники\"]},\r",
+							"        \"google\": {\r",
+							"            \"type\":\"string\",\r",
+							"            \"enum\":[\"disk:/Социальные сети/Google+\"]},\r",
+							"        \"instagram\": {\r",
+							"            \"type\":\"string\",\r",
+							"            \"enum\":[\"disk:/Социальные сети/Instagram\"]},\r",
+							"        \"vkontakte\": {\r",
+							"            \"type\":\"string\",\r",
+							"            \"enum\":[\"disk:/Социальные сети/ВКонтакте\"]},\r",
+							"        \"mailru\": {\r",
+							"            \"type\":\"string\",\r",
+							"            \"enum\":[\"disk:/Социальные сети/Мой Мир\"]},\r",
+							"        \"downloads\": {\r",
+							"            \"type\":\"string\",\r",
+							"            \"enum\":[\"disk:/Загрузки/\"]},\r",
+							"        \"applications\": {\r",
+							"            \"type\":\"string\",\r",
+							"            \"enum\":[\"disk:/Приложения\"]},\r",
+							"        \"facebook\": {\r",
+							"            \"type\":\"string\",\r",
+							"            \"enum\":[\"disk:/Социальные сети/Facebook\"]},\r",
+							"        \"social\": {\r",
+							"            \"type\":\"string\",\r",
+							"            \"enum\":[\"disk:/Социальные сети/\"]},\r",
+							"        \"screenshots\": {\r",
+							"            \"type\":\"string\",\r",
+							"            \"enum\":[\"disk:/Скриншоты/\"]},\r",
+							"        \"photostream\": {\r",
+							"            \"type\":\"string\",\r",
+							"            \"enum\":[\"disk:/Фотокамера/\"]}\r",
+							"    },\r",
+							"    \"user\": {\r",
+							"        \"country\": [\"ru\"],\r",
+							"        \"login\": \"jena65535\",\r",
+							"        \"display_name\": [\"jena65535\"],\r",
+							"        \"uid\": [\"125170578\"]\r",
+							"    },\r",
+							"    \"revision\": {\"type\":\"string\",\"pattern\":\"^[0-9]*\"}\r",
+							"};\r",
+							"\r",
+							"pm.test('Schema is valid', function() {\r",
+							"  pm.response.to.have.jsonSchema(schema);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"connection": true,
+					"accept-encoding": true,
+					"user-agent": true,
+					"accept": true
+				},
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "OAuth AgAAAAAHdfOSAADLW0mabgH2E0sGrxbg1_tTB6Y",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://cloud-api.yandex.net/v1/disk",
+					"protocol": "https",
+					"host": [
+						"cloud-api",
+						"yandex",
+						"net"
+					],
+					"path": [
+						"v1",
+						"disk"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "AgAAAAAHdfOSAADLW0mabgH2E0sGrxbg1_tTB6Y",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
