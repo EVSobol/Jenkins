@@ -3,7 +3,7 @@
 	"description": "Testing API",
 
 	"scripts":{
-	"api-tests":"newman run D:\sobol.json -n 3" 
+	"api-tests":"newman run sobol.json -n 3" 
 },
 	"author":"",
 	"license": "ISC",
