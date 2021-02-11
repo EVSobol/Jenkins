@@ -4,7 +4,7 @@
 	"description": "Testing stage demo",
 
 	"scripts": {
-		"api-tests": "newman run TESTS.json -e XSOLLA.json"
+		"api-tests": "newman run TESTS.json -e XSOLLA.json --reporters cli,junit --reporter-junit-export newman.xml"
 	},
 
 	"author": "",
