@@ -1,0 +1,142 @@
+{
+	"info": {
+		"_postman_id": "ee97badd-a400-4a17-b0ee-e7bf4e1f454e",
+		"name": "TEST-Jenkins",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Создание заявки",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var endings = [\"mail.ru\", \"list.ru\", \"rambler.ru\", \"yandex.ru\", \"gmail.com\"],\r",
+							"    symbols1 = \"QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm1234567890!#$%&‘*+-/=?^_`~\",\r",
+							"    symbols2 = \"QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm1234567890\",\r",
+							"    symbols3 = \"QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm\";\r",
+							"function rand(min, max) {\r",
+							"    return (min + Math.random() * (max - min + 1)) | 0\r",
+							"}\r",
+							" \r",
+							"function getRandomStr1(len) {\r",
+							"    var ret = \"\"\r",
+							"    for (var i = 0; i < len; i++)\r",
+							"        console.log(ret += symbols1[rand(0, symbols1.length - 1)]);\r",
+							"    return ret;\r",
+							"}\r",
+							" \r",
+							"function getRandomStr2(len) {\r",
+							"    var ret = \"\"\r",
+							"    for (var i = 0; i < len; i++)\r",
+							"        console.log(ret += symbols2[rand(0, symbols2.length - 1)]);\r",
+							"    return ret;\r",
+							"}\r",
+							"\r",
+							"function getRandomStr3(len) {\r",
+							"    var ret = \"\"\r",
+							"    for (var i = 0; i < len; i++)\r",
+							"        console.log(ret += symbols3[rand(0, symbols3.length - 1)]);\r",
+							"    return ret;\r",
+							"}\r",
+							"\r",
+							"function getEmail() {\r",
+							"    var a = getRandomStr1(rand(32, 128)),\r",
+							"        b = getRandomStr2(rand(32, 128));\r",
+							"    return a + \"-\" + b + \"@\" + endings[rand(0, endings.length - 1)];\r",
+							"}\r",
+							"\r",
+							"pm.environment.set(\"Email\", getEmail())\r",
+							"pm.environment.set(\"Name\", getRandomStr3(rand(1, 100)))\r",
+							"pm.environment.set(\"Event\", getRandomStr2(rand(1, 200)))"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"УСПЕШНО 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"res = pm.response.json()[0]\r",
+							"pm.test(\"ТЕЛО ОТВЕТА КОРРЕКТНО\", function(){\r",
+							"    pm.expect(res.status).to.eql(\"ok\");\r",
+							"})\r",
+							"pm.environment.set(\"Id\", pm.response.json()[0].id)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true,
+					"accept-encoding": true,
+					"connection": true,
+					"user-agent": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": " {\r\n    \"data\":[{\r\n        \"Name\":\"{{Name}}\",\r\n        \"Email\":\"{{Email}}\",\r\n        \"Event\":\"{{Event}}\"\r\n    }]\r\n }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{http}}{{url}}{{api_reqest}}"
+			},
+			"response": []
+		},
+		{
+			"name": "Проверить добавления значения",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"let id_val = pm.environment.get(\"Id\")\r",
+							"pm.test(\"Значение добавилось корректно\",function(){\r",
+							"    var jsonData = pm.response.json();\r",
+							"    let len = jsonData.length\r",
+							"        if (jsonData[len-1].Id == id_val){\r",
+							"            pm.expect(jsonData[len-1].Id).to.eql(id_val);\r",
+							"            pm.expect(jsonData[len-1].Name).to.eql(pm.environment.get(\"Name\"))\r",
+							"            pm.expect(jsonData[len-1].Event).to.eql(pm.environment.get(\"Event\"))\r",
+							"            pm.expect(jsonData[len-1].Email).to.eql(pm.environment.get(\"Email\"))\r",
+							"        }   \r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true,
+					"accept-encoding": true,
+					"connection": true,
+					"user-agent": true
+				}
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{https}}{{url}}{{api_reqest}}{{get_db}}"
+			},
+			"response": []
+		}
+	]
+}
