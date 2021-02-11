@@ -95,48 +95,6 @@
 				"url": "{{http}}{{url}}{{api_reqest}}"
 			},
 			"response": []
-		},
-		{
-			"name": "Проверить добавления значения",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 200\", function () {\r",
-							"    pm.response.to.have.status(200);\r",
-							"});\r",
-							"\r",
-							"let id_val = pm.environment.get(\"Id\")\r",
-							"pm.test(\"Значение добавилось корректно\",function(){\r",
-							"    var jsonData = pm.response.json();\r",
-							"    let len = jsonData.length\r",
-							"        if (jsonData[len-1].Id == id_val){\r",
-							"            pm.expect(jsonData[len-1].Id).to.eql(id_val);\r",
-							"            pm.expect(jsonData[len-1].Name).to.eql(pm.environment.get(\"Name\"))\r",
-							"            pm.expect(jsonData[len-1].Event).to.eql(pm.environment.get(\"Event\"))\r",
-							"            pm.expect(jsonData[len-1].Email).to.eql(pm.environment.get(\"Email\"))\r",
-							"        }   \r",
-							"})"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"protocolProfileBehavior": {
-				"disabledSystemHeaders": {
-					"accept": true,
-					"accept-encoding": true,
-					"connection": true,
-					"user-agent": true
-				}
-			},
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": "{{https}}{{url}}{{api_reqest}}{{get_db}}"
-			},
-			"response": []
 		}
 	]
 }
